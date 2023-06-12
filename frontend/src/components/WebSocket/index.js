@@ -1,19 +1,16 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
+const WebSocket = () => {
+  const dispatch = useDispatch();
 
-const WebSocket = ()=>{
-    const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch({ type: "START_WEBSOCKET" });
 
-    useEffect( ()=>{
-        dispatch({ type: "START_WEBSOCKET" });
+    return () => dispatch({ type: "CLOSE_SOCKET" });
+  }, []);
 
-        return ()=>dispatch({type: "CLOSE_SOCKET"})
-    },[])
-
-    return <></>
-
-}
-
+  return <></>;
+};
 
 export default WebSocket;

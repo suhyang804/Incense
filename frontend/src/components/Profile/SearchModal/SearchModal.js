@@ -36,7 +36,6 @@ const SearchModal = ({
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResult, setSearchResult] = useState(null);
   const [errorMsg, setErrorMsg] = useState("");
-
   const textArr = ["I have it", "I had it", "I want it"];
 
   const fetchSearch = async () => {

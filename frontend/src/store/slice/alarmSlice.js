@@ -18,8 +18,8 @@ export const alarmSlice = createSlice({
       state.alarmList = [...payload];
     },
     setAlarmLen: (state, { payload }) => {
-      state.alarmLen = payload
-    }
+      state.alarmLen = payload;
+    },
   },
 });
 

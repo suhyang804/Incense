@@ -462,6 +462,7 @@ export default function SharePage() {
           <Box
             sx={{
               // margin:"3rem",
+<<<<<<< HEAD
               width: "100%",
               display: "flex",
               flexDirection: "row",
