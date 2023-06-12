@@ -368,8 +368,6 @@ const ListPage = () => {
             {/* <p>인기순 | 후기 많은 순</p> */}
             {/* <ToggleFilter /> */}
           </Box>
-
-          {/* 여기부터 카드리스트 */}
           <Box
             sx={{
               // margin:"3rem",

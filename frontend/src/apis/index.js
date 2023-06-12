@@ -50,6 +50,7 @@ const axiosAuthApi = (url, options) => {
 
   // response handling
   // 성공시 콘솔에 response.data 출력, 에러시 콘솔에 에러 출력
+
   instance.interceptors.response.use(
     (response) => {
       return response.data;
@@ -61,6 +62,29 @@ const axiosAuthApi = (url, options) => {
   );
 
   return instance;
+};
+
+const axiosAuthApi = (url, options) => {
+  const instance = axios.create({
+    baseURL: url,
+    headers: { Authorization: accessToken },
+    ...options,
+  });
+
+  return instance;
+
+  // instance.interceptors.request.use(
+  //   function (config) {
+  //     const accessToken = localStorage.getItem("accessToken");
+  //     if (accessToken) {
+  //       config.headers["Authorization"] = accessToken;
+  //     }
+  //     return config;
+  //   },
+  //   function (error) {
+  //     return Promise.reject(error);
+  //   }
+  // );
 };
 
 export const defaultInstance = axiosApi(BASE_URL);

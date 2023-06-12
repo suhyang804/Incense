@@ -24,8 +24,6 @@ import {
 import api from "../../apis/api";
 
 const NavBar = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { pathname } = useLocation();
 
   const isLoggedIn = useSelector((state) => state.userReducers.isLoggedIn);

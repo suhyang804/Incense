@@ -2,7 +2,6 @@ package com.suyang.incense.db.entity.relation;
 
 import com.suyang.incense.db.entity.member.Member;
 import com.suyang.incense.db.entity.perfume.Perfume;
-import com.suyang.incense.db.entity.review.Review;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,7 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import lombok.Getter;
@@ -21,7 +19,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 @Entity
 @Getter
@@ -48,12 +45,7 @@ public class MemberPerfume {
   @Enumerated(EnumType.STRING)
   private Category category;
 
-  @NotNull
   @ColumnDefault("0")
   private Byte isAnalyzed;    //0: 분석x, 1:분석o
-
-  @OneToOne(fetch = FetchType.LAZY, mappedBy = "memberPerfume")
-  private Review review;
-
 
 }

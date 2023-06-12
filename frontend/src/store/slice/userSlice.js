@@ -1,5 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import api from "../../apis/api";
+import { createSlice } from "@reduxjs/toolkit";
 
 // export const login = createAsyncThunk("user/login", async (code) => {
 //   const res = await api.user.login("kakao", { params: { code: code } });
@@ -37,6 +36,7 @@ const userSlice = createSlice({
       state.lastTasteUpdate = action.payload.updateTasteTime;
     },
   },
+  reducers: {},
   // extraReducers: (builder) => {
   //   builder.addCase(login.fulfilled, (state, action) => {
   //     state.isLoggedIn = true;

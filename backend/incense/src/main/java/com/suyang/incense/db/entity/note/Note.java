@@ -1,8 +1,7 @@
 package com.suyang.incense.db.entity.note;
 
-import com.suyang.incense.db.entity.relation.MyAnalysisNote;
 import com.suyang.incense.db.entity.relation.PerfumeNote;
-import com.suyang.incense.db.entity.relation.TestNoteResult;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -32,7 +31,7 @@ public class Note {
   private Long id;
 
   @NotNull
-  @Column(length = 30)
+  @Column(length = 100)
   private String name;
 
   @Enumerated(EnumType.STRING)
@@ -41,9 +40,4 @@ public class Note {
   @OneToMany(mappedBy = "note")
   private List<PerfumeNote> perfumeNoteList = new ArrayList<>();
 
-  @OneToMany(mappedBy = "note")
-  private List<TestNoteResult> testNoteResultList = new ArrayList<>();
-
-  @OneToMany(mappedBy = "note")
-  private List<MyAnalysisNote> myAnalysisNoteList = new ArrayList<>();
 }

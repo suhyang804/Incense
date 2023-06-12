@@ -23,6 +23,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j'
@@ -36,6 +37,23 @@ dependencies {
 	//Querydsl
 	implementation 'com.querydsl:querydsl-jpa:5.0.0'
 	implementation 'com.querydsl:querydsl-apt:5.0.0'
+
+	// Spring Security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	testImplementation 'org.springframework.security:spring-security-test'
+
+	// jwt
+//	implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	implementation 'com.auth0:java-jwt:3.10.3'
+
+	implementation 'com.google.guava:guava:29.0-jre'
+	annotationProcessor 'com.google.guava:guava:29.0-jre'
+
+	//gson
+	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
+
+
 }
 
 tasks.named('test') {
