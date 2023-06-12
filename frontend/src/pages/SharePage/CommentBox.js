@@ -18,7 +18,7 @@ import ReplyBox from './ReplyBox';
 
 function CommentBox(props) {
   
-  const userNickname = '전태영2'
+  // const userNickname = '전태영2'
   const commentWriterNickname = '전태영'
 
   const [replyValue, setReplyValue] = useState('')
@@ -28,7 +28,6 @@ function CommentBox(props) {
     ? alert('답글을 입력하세요')
     : setReplyValue(replyValue)
   }
-  console.log('답글내용 ==',replyValue)
 
   const [isSecret, setIsSecret] = useState(0)
   const onChangeSecret = () => {
@@ -36,14 +35,14 @@ function CommentBox(props) {
     ? setIsSecret(1)
     : setIsSecret(0)
     
-    console.log('비밀댓글 여부 변경')
   }
-  console.log('답글비밀여부==',isSecret)
 
   
   const comment = props.comment
-  console.log(comment)
 
+  const username = props.username
+  const isLoggedIn = props.isLoggedIn
+  const article = props.article
   // 답글달기 누르면 입력창
   const [showPostReply, setShowPostReply] = useState(false)
   const onClickPostReply = () => {
@@ -89,8 +88,6 @@ function CommentBox(props) {
   
   console.log(data)
   const onDeleteConfirm = () => {
-    console.log('delete comment')
-    console.log(comment.commentId,)
     api.comment.delete(comment.commentId, data)
     window.location.reload()
   }
@@ -106,15 +103,11 @@ function CommentBox(props) {
 
   const articleId = props.articleId
   useEffect(() => {
-    console.log('호출')
     api.comment.getComment(articleId)
       .then((res) => {
-        console.log('comment가져오기')
-        console.log(res)
-        // dispatch(commentActions.getComment(res))
+
       })
       .catch((err) => {
-        console.log(err)
         alert(err)
       })
     }, [])
@@ -127,13 +120,10 @@ function CommentBox(props) {
     parentId: comment.commentId
   }
   
-  console.log(replyRegister)
 
   const onSubmitReply = () => {
-    console.log('답글 저장')
     api.comment.register(articleId, replyRegister)
     .then((res) => {
-      console.log(res)
       window.location.reload()
     })
     .catch((err) => {
@@ -142,10 +132,10 @@ function CommentBox(props) {
   }
   
   // 비밀댓글일때 사용자 = 작성자 or 글작성자이면 보이게 하는 조건 추가 필요
-  if (comment.isSecret === 1 ) {
+  if (comment.isSecret === 1 && username!==article.nickname && username!==comment.writer) {
     return (
       <div>
-      <Box sx={{width:'100%',height:'8rem',marginLeft:'1rem', display:'flex',flexDirection:'column', borderTop:'1px solid lightgrey',justifyContent:'center'}}>
+      <Box sx={{width:'100%',height:'8rem',marginLeft:'1rem', display:'flex',flexDirection:'column', borderBottom:'1px solid lightgrey',justifyContent:'center'}}>
         <div style={{margin:'0.5rem',display:'flex',flexDirection:'row'}}>
           <p style={{marginTop:'1rem',marginRight:'0.5rem'}}><RxLockClosed/></p>          <p style={{marginTop:'1rem'}}>비밀 댓글입니다.</p>
         </div>
@@ -188,21 +178,21 @@ function CommentBox(props) {
 
   return (
     <div>
-    <Box sx={{width:'100%',height:'8rem',marginLeft:'1rem', display:'flex',flexDirection:'column', borderTop:'1px solid lightgrey'}}>
+    <Box sx={{width:'100%',height:'8rem',marginLeft:'1rem', display:'flex',flexDirection:'column', borderBottom:'1px solid lightgrey'}}>
       <div style={{margin:'0.5rem'}}>
         
         
         <Box sx={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>  
         <p style={{fontWeight:'bold',fontSize:'1.1rem'}}>{comment.writer}</p>
-        {userNickname === comment.writer
+        {username === comment.writer
         ?<Box>
-          <img
+          {/* <img
           src="/assets/icons/edit.svg"
           alt="modify"
           // style={{ position: "absolute", right: "0" }}
           style={{marginRight:'0.5rem',cursor:'pointer'}}
           onClick={onEditcomment}
-          />
+          /> */}
           <img
           src="/assets/icons/delete.svg"
           alt="modify"
@@ -215,14 +205,14 @@ function CommentBox(props) {
         </Box>
         
         <p style={{marginTop:'1rem'}}>{comment.content}</p>
-        <p style={{marginTop:'0.5rem',fontSize:'0.7rem', color:'grey'}}>{comment.createdDate}</p>
+        <p style={{marginTop:'0.5rem',fontSize:'0.7rem', color:'grey'}}>{comment.createdDate.substr(0,16)}</p>
         <p onClick={onClickPostReply} style={{marginTop:'0.5rem',fontSize:'0.9rem',cursor:'pointer'}}>답글 달기</p>
       </div>
     </Box>
       {/* 댓글마다의 대댓글 리스트  */}
       {comment.children && comment.children.map((reply, index) => {
         return (
-          <ReplyBox key={index} index={index} comment={comment.children} parent={comment} onEditcomment={onEditcomment} onDeleteComment={onDeleteComment} onChangeSecret={onChangeSecret}
+          <ReplyBox key={index} index={index} article={article} username={username} isLoggedIn={isLoggedIn} comment={comment.children} parent={comment} onEditcomment={onEditcomment} onDeleteComment={onDeleteComment} onChangeSecret={onChangeSecret}
             onClickPostReply={onClickPostReply} showPostReply={showPostReply} onChangeReply={onChangeReply} onSubmitReply={onSubmitReply}/>
         )
       })}

@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import api from "../../apis/api";
 import { perfumeListActions } from "../../store/slice/perfumeListSlice";
 import { alarmSliceReducer } from "../../store/slice/alarmSlice";
+import { login, logout } from "../../store/slice/userSlice";
 
 const ListPage = () => {
   const [dropdownVisibility, setDropdownVisibility] = useState(false);
@@ -57,41 +58,29 @@ const ListPage = () => {
     api.list
       .getList(page)
       .then((res) => {
-        console.log("list가져오기");
-        console.log(res);
         dispatch(perfumeListActions.getPerfumeList(res));
       })
+
       .catch((err) => {
-        console.log(err);
         alert(err);
       });
-  }, [page]);
+  }, []);
 
-  console.log("페이지==", page);
+  const perfumeList = useSelector((state) => {
+    return state.perfumeListReducers.perfumeList;
+  });
+  // 리스트는 perfumeList.content로 접근해야함
 
-  const perfumeList = useSelector(
-    (state) => (state.perfumeListReducers.perfumeList)
-  );
-
-  const applyFilter = () => {
-    console.log("필터 적용하기");
-    console.log(checklist);
-    console.log(checklist2);
-    console.log(checklist3);
+  const applyFilter = (curretnPage) => {
     api.list
-      .getFilteredList(page, checklist, checklist2, checklist3)
+      .getFilteredList(curretnPage, checklist, checklist2, checklist3)
       .then((res) => {
-        console.log("filter list가져오기");
-        console.log(res);
         dispatch(perfumeListActions.getPerfumeList(res));
       })
       .catch((err) => {
-        console.log(err);
         alert(err);
       });
   };
-
-  console.log("퍼퓸리스트", perfumeList)
 
   return (
     <Box sx={{ marginBottom: "5rem" }}>
@@ -332,7 +321,7 @@ const ListPage = () => {
           ></Box>
           <Button
             variant="outlined"
-            onClick={applyFilter}
+            onClick={() => applyFilter(page)}
             sx={{
               width: "10rem",
               height: "2rem",
@@ -371,14 +360,13 @@ const ListPage = () => {
               textAlign: "center",
             }}
           >
-            {perfumeList.totalElements
-            && (<p style={{ fontWeight: "bold" }}>
-              총 {perfumeList.totalElements}개의 향수가 등록되어 있습니다.
-            </p>)
-
-            }
+            {perfumeList.totalElements && (
+              <p style={{ fontWeight: "bold" }}>
+                총 {perfumeList.totalElements}개의 향수가 등록되어 있습니다.
+              </p>
+            )}
             {/* <p>인기순 | 후기 많은 순</p> */}
-            <ToggleFilter />
+            {/* <ToggleFilter /> */}
           </Box>
 
           {/* 여기부터 카드리스트 */}
@@ -410,11 +398,19 @@ const ListPage = () => {
           >
             <Pagination
               // total={Object.keys(perfumeList).length}
+              total={perfumeList ? perfumeList.totalElements : 0}
+              limit={limit}
+              page={page}
+              setPage={setPage}
+              request={applyFilter}
+            />
+            {/* <Pagination
+              // total={Object.keys(perfumeList).length}
               total={200}
               limit={limit}
               page={page}
               setPage={setPage}
-            />
+            /> */}
           </Box>
         </Box>
       </Box>

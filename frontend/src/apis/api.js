@@ -6,6 +6,7 @@ const SHARE = "/deal";
 const PROFILE = "/mypage";
 const IMG = "/display";
 const ALARM = "/alarm";
+const ANALYSIS = "/analysis";
 
 const api = {
   user: {
@@ -17,7 +18,11 @@ const api = {
         params: { nickname: name },
       }),
     getUserInfo: () => authInstance.get(`${USERS}/info`),
-    putUserInfo: (data) => authInstance.put(`${USERS}/modify`, data),
+    putUserInfo: (data) => authInstance.put(`${USERS}/modify/info`, data),
+    putUserProfileImg: (data) =>
+      authInstance.put(`${USERS}/modify/profile`, data, {
+        headers: { "Content-Type": "multipart/form-data" },
+      }),
   },
   share: {
     getArticle: (articleId) => defaultInstance.get(`${SHARE}/${articleId}`),
@@ -35,7 +40,7 @@ const api = {
         params: {
           page: page,
           gubun: gubun,
-          close : checklist1,
+          close: checklist1,
           transaction: checklist2,
           brands: checklist3,
           scents: checklist4,
@@ -50,7 +55,9 @@ const api = {
         headers: { "Content-Type": "multipart/form-data" },
       }),
     update: (articleId, article) =>
-      authInstance.put(`${SHARE}/${articleId}`, article),
+      authInstance.put(`${SHARE}/${articleId}`, article, {
+        headers: { "Content-Type": "multipart/form-data" },
+      }),
     delete: (articleId) => authInstance.delete(`${SHARE}/${articleId}`),
     bookmark: (articleId) => authInstance.put(`${SHARE}/bookmark/${articleId}`),
     check: (articleId) => authInstance.get(`${SHARE}/bookmark/${articleId}`),
@@ -94,7 +101,10 @@ const api = {
       });
     },
     getDetail: (detailId) => defaultInstance.get(`${PERFUMES}/${detailId}`),
-    getCategory: (detailId) => authInstance.get(`${PERFUMES}/category/${detailId}`)
+    getCategory: (detailId) =>
+      authInstance.get(`${PERFUMES}/category/${detailId}`),
+    getSimilarList: (detailId) =>
+      defaultInstance.get(`${PERFUMES}/similar/list/${detailId}`),
   },
   profile: {
     getPerfumeList: (type) =>
@@ -117,6 +127,14 @@ const api = {
   },
   analysis: {
     postTestResult: (data) => authInstance.post(`/test`, data),
+    getUpdateTaste: () => authInstance.get(`${ANALYSIS}/update`),
+    getWordCloud: () => authInstance.get(`${ANALYSIS}/word-cloud`),
+    getNoteGraph: () => authInstance.get(`${ANALYSIS}/note-graph`),
+    getWantPerfumePredict: () =>
+      authInstance.get(`${ANALYSIS}/want/similarity`),
+    getRecommandList: () => authInstance.get(`${ANALYSIS}/all/similarity`),
+    getSimilarity: (detailId) =>
+      authInstance.get(`${PERFUMES}/similarity/${detailId}`),
   },
   image: {
     getImage: (fileName) => defaultInstance.get(`${IMG}?filename=${fileName}`),
@@ -124,8 +142,8 @@ const api = {
   review: {
     postReview: (reviewArticle) =>
       authInstance.post(`${PROFILE}/perfume`, reviewArticle),
-    getReview: (perfumeId, page) => 
-      defaultInstance.get(`${PERFUMES}/${perfumeId}/review?page=${page}`)
+    getReview: (perfumeId, page) =>
+      defaultInstance.get(`${PERFUMES}/${perfumeId}/review?page=${page}`),
   },
   alarm: {
     getAlarm: (perfumeId) => authInstance.get(`${ALARM}/${perfumeId}`),
@@ -134,6 +152,7 @@ const api = {
     getAlarmSend: () => authInstance.get(`${ALARM}/send`),
     deleteAlarmSend: (sendId) => authInstance.delete(`${ALARM}/send/${sendId}`),
     readAlarmSend: (sendId) => authInstance.put(`${ALARM}/send/${sendId}`),
+    readAlarmSendAll: () => authInstance.put(`${ALARM}/send`),
     deleteAlarm: (perfumeId) => authInstance.delete(`${ALARM}/${perfumeId}`),
   },
 };

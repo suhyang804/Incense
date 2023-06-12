@@ -11,13 +11,16 @@ import ArticleCard from "./ArticleCard/ArticleCard";
 import Pagination from "../../components/common/Pagination/Pagination";
 import api from "../../apis/api";
 import { articleListActions } from "../../store/slice/articleListSlice";
+import { login, logout } from "../../store/slice/userSlice";
+import { articleActions } from "../../store/slice/articleSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 // 체크박스 필터링시 들어가는 value값 확인하기
 
 export default function SharePage() {
-  const isLoggedIn = true;
-
+  const isLoggedIn = useSelector((state) => {
+    return state.userReducers.isLoggedIn;
+  });
   const [dropdownVisibility, setDropdownVisibility] = useState(false);
   const [dropdown2Visibility, setDropdown2Visibility] = useState(false);
   const [dropdown3Visibility, setDropdown3Visibility] = useState(false);
@@ -32,8 +35,6 @@ export default function SharePage() {
   const [gubun, setGubun] = useState("");
   const [page, setPage] = useState(1);
 
-  
-
   const dispatch = useDispatch();
 
   const applyFilter = (currentPage) => {
@@ -47,20 +48,20 @@ export default function SharePage() {
         checklist4
       )
       .then((res) => {
-        console.log("필터 적용 성공");
         dispatch(articleListActions.getArticleList(res));
+        setPage(res.pageable.pageNumber + 1);
       })
       .catch((err) => {
-        console.log(err);
         alert(err);
       });
-    console.log("필터 적용하기");
   };
 
   const navigate = useNavigate();
+
   const registerPost = () => {
     if (isLoggedIn === true) {
-      navigate('/share/register?isForEdit=false')
+      navigate("/share/register?isForEdit=false");
+      dispatch(articleActions.reset());
     } else {
       alert("로그인이 필요합니다.");
       navigate("/login");
@@ -69,29 +70,21 @@ export default function SharePage() {
 
   // 페이지네이션
 
-
   useEffect(() => {
     api.share
       .getList(page)
       .then((res) => {
-        console.log("sharelist가져오기");
-        console.log(res);
         dispatch(articleListActions.getArticleList(res));
       })
       .catch((err) => {
-        console.log(err);
         alert(err);
       });
-      
   }, []);
 
-
-
   const articleList = useSelector((state) => {
-    console.log(state)
     return state.articleListReducers.articleList;
     // console.log(state)
-  })
+  });
 
   if (!articleList) return null;
   return (
@@ -288,7 +281,7 @@ export default function SharePage() {
               display: "flex",
               flexDirection: "row",
               justifyContent: "space-between",
-              width: "50%",
+              width: "100%",
               alignItems: "center",
               marginBottom: "1rem",
             }}
@@ -299,8 +292,9 @@ export default function SharePage() {
                   <Box
                     sx={{
                       display: "flex",
+                      width: "100%",
                       flexDirection: "column",
-                      fontSize: "1.2rem",
+                      fontSize: "1rem",
                       height: "15rem",
                       justifyContent: "space-around",
                     }}
@@ -400,7 +394,7 @@ export default function SharePage() {
 
           <Button
             variant="outlined"
-            onClick={()=>applyFilter(page)}
+            onClick={() => applyFilter(page)}
             sx={{
               width: "10rem",
               height: "2rem",
@@ -439,7 +433,11 @@ export default function SharePage() {
               textAlign: "center",
             }}
           >
-            <ToggleFilter2 gubun={gubun} setGubun={setGubun}/>
+            <ToggleFilter2
+              gubun={gubun}
+              setGubun={setGubun}
+              goGubun={applyFilter}
+            />
 
             <Button
               variant="outlined"
@@ -464,30 +462,28 @@ export default function SharePage() {
           <Box
             sx={{
               // margin:"3rem",
-              width:"100%",
-              display:"flex",
-              flexDirection:"row",
-              justifyContent:"start",
-              flexWrap:"wrap",
-              marginBottom:"5rem"              
-            }}>
-            { articleList.content?.map((article, index) => {
-              return (
-                <ArticleCard key={index} article={article}/>
-              )
+              width: "100%",
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "start",
+              flexWrap: "wrap",
+              marginBottom: "5rem",
+            }}
+          >
+            {articleList.content?.map((article, index) => {
+              return <ArticleCard key={index} article={article} />;
             })}
-
           </Box>
-            <Pagination 
-              // total={Object.keys(perfumeList).length}
-              total={articleList? articleList.totalElements : 0}
-              limit={limit}
-              page={page}
-              setPage={setPage}
-              request={applyFilter}
-            />          
-          </Box>
+          <Pagination
+            // total={Object.keys(perfumeList).length}
+            total={articleList ? articleList.totalElements : 0}
+            limit={limit}
+            page={page}
+            setPage={setPage}
+            request={applyFilter}
+          />
         </Box>
       </Box>
+    </Box>
   );
 }
