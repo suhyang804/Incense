@@ -26,6 +26,7 @@ const ListPage = () => {
   const [checklist2, setChecklist2] = useState([]);
   const [checklist3, setChecklist3] = useState([]);
   // const totalCheck = {brand:checklist, scent:checklist2, concentration: checklist3, }
+
   // 페이지네이션
   const [limit, setLimit] = useState(20);
   const [page, setPage] = useState(1);
@@ -367,6 +368,8 @@ const ListPage = () => {
             {/* <p>인기순 | 후기 많은 순</p> */}
             {/* <ToggleFilter /> */}
           </Box>
+
+          {/* 여기부터 카드리스트 */}
           <Box
             sx={{
               // margin:"3rem",

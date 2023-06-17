@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box } from "@mui/system";
 // import BellIcon from './bell1.svg'
 import { BsBell } from "react-icons/bs";
@@ -8,7 +8,7 @@ import { Button } from "@mui/material";
 import CardComponent2 from "./CardComponent2";
 import DivideLine from "../../components/common/DivideLine/DivideLine";
 import ReviewTable from "./ReviewTable";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import CheckStatus from "./CheckStatus";
 import CheckModal from "./CheckModal";
 import { useDispatch, useSelector } from "react-redux";
@@ -381,14 +381,7 @@ const DetailPage = () => {
           })}
       </Box>
       <DivideLine />
-      <Box
-        sx={{
-          width: "80rem",
-          display: "flex",
-          flexDirection: "column",
-          marginBottom: "3rem",
-        }}
-      >
+      <Box sx={{ width: "80rem", display: "flex", flexDirection: "column" }}>
         {/* <h1 style={{fontSize:'2rem', fontWeight:'bold', marginTop:'2rem', marginBottom:'3rem'}}>후기 (28)</h1> */}
         <ReviewTable perfumeInfo={perfumeInfo} detailId={detailId} />
       </Box>

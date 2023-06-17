@@ -1,4 +1,4 @@
-import { defaultInstance } from ".";
+import { defaultInstance, authInstance } from ".";
 
 const USERS = "/member";
 const PERFUMES = "/perfume";
@@ -10,7 +10,8 @@ const ANALYSIS = "/analysis";
 
 const api = {
   user: {
-    login: (type, params) => defaultInstance.get(`/auth/login/${type}`, params),
+    login: (type, code) =>
+      defaultInstance.get(`/auth/login/${type}`, { params: { code: code } }),
     register: (data) => defaultInstance.post(`${USERS}/register`, data),
     checkName: (name) =>
       defaultInstance.get(`${USERS}/nickname/check`, {

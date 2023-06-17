@@ -1,9 +1,5 @@
 import { Navigate, Route, Routes } from "react-router";
 import NavBar from "./components/NavBar/NavBar";
-// import LogInPage from "./pages/LogInPage/LogInPage";
-// import KakaoRedirect from "./components/LogIn/KakaoRedirect/KakaoRedirect";
-// import SignUpPage from "./pages/SignUpPage/SignUpPage";
-// import MainPage from "./pages/MainPage/MainPage";
 import ListPage from "./pages/ListPage/ListPage";
 import DetailPage from "./pages/DetailPage/DetailPage";
 import SharePage from "./pages/SharePage/SharePage";
@@ -15,12 +11,10 @@ import ProfileActivityPage from "./pages/Profile/ProfileActivityPage/ProfileActi
 import RegisterPage from "./pages/SharePage/RegisterPage";
 // import RegisterOrEdit from "./pages/SharePage/RegisterOrEdit";
 import ArticleDetail from "./pages/SharePage/ArticleDetail";
-
 import { PrivateRoute } from "./components/LogIn/PrivateRoute.js/PrivateRoute";
 import WebSocket from "./components/WebSocket";
 import { useSelector } from "react-redux";
 import TestPage from "./pages/TestPage/TestPage";
-
 function App() {
   const isLoggedIn = useSelector((state) => state.userReducers.isLoggedIn);
   return (

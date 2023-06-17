@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { defaultInstance } from "../../../apis";
+import { useDispatch } from "react-redux";
+import { login } from "../../../store/slice/userSlice";
 import api from "../../../apis/api";
 import Loading from "../../common/Loading/Loading";
 
 const KakaoRedirect = (props) => {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // 인가코드
