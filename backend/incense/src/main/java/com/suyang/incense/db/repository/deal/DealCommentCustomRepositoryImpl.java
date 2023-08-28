@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.*;
 
+import static com.querydsl.core.group.GroupBy.groupBy;
+import static com.querydsl.core.group.GroupBy.list;
 import static com.suyang.incense.db.entity.deal.QCommentReply.commentReply;
 import static com.suyang.incense.db.entity.deal.QDealComment.dealComment;
 import static com.suyang.incense.db.entity.member.QMember.member;
@@ -23,68 +25,34 @@ public class DealCommentCustomRepositoryImpl implements DealCommentCustomReposit
 
     public List<DealCommentRes> getComments(Long dealId) {
 
-        List<DealCommentRes> comments = jpaQueryFactory
-                .select(Projections.constructor(
-                        DealCommentRes.class,
-                        dealComment.id,
-                        dealComment.member.nickname,
-                        dealComment.content,
-                        dealComment.createdDate,
-                        dealComment.isSecret
-                ))
-                .from(dealComment)
-                .innerJoin(member).on(dealComment.member.id.eq(member.id))
+        List<DealCommentRes> resultMap = jpaQueryFactory
+                .selectFrom(dealComment)
+                .join(dealComment.member, member)
+                .innerJoin(commentReply).on(commentReply.dealComment.eq(dealComment))
+                .join(commentReply.member, member)
                 .where(dealComment.deal.id.eq(dealId))
-                .orderBy(dealComment.id.asc())
-                .fetch();
+                .transform(groupBy(dealComment.id)
+                        .list(
+                                Projections.constructor(
+                                        DealCommentRes.class,
+                                        dealComment.id,
+                                        dealComment.member.nickname,
+                                        dealComment.content,
+                                        dealComment.createdDate,
+                                        dealComment.isSecret,
+                                        list(Projections.constructor(CommentReplyRes.class,
+                                                commentReply.id,
+                                                commentReply.dealComment.id,
+                                                commentReply.member.nickname,
+                                                commentReply.content,
+                                                commentReply.createdDate,
+                                                commentReply.isSecret
+                                        ))
+                                )
+                        )
+                );
 
-        List<CommentReplyRes> replyComments = jpaQueryFactory
-                .select(Projections.constructor(
-                        CommentReplyRes.class,
-                        commentReply.id,
-                        commentReply.dealComment.id,
-                        commentReply.member.nickname,
-                        commentReply.content,
-                        commentReply.createdDate,
-                        commentReply.isSecret
-                ))
-                .from(commentReply)
-                .innerJoin(dealComment).on(commentReply.dealComment.eq(dealComment))
-                .innerJoin(member).on(commentReply.member.eq(member))
-                .orderBy(commentReply.dealComment.id.asc())
-                .orderBy(commentReply.id.asc())
-                .fetch();
-
-        Map<Long, DealCommentRes> resultMap = new HashMap<>();
-
-        for(DealCommentRes comment : comments){
-            Long commentId = comment.getCommentId();
-            resultMap.put(commentId, comment);
-        }
-
-        //resultMap을 순회하면서 key(commentId)에 해당하는 대댓글을 list에 add해준다.
-        resultMap.entrySet().stream().forEach(entry -> {
-            Long commentId = entry.getKey();
-            List<CommentReplyRes> children = entry.getValue().getChildren();
-            if(children == null) children = new ArrayList<>();
-            boolean history = false;
-            for(CommentReplyRes replyComment : replyComments){
-                if(commentId == replyComment.getParentId()){
-                    history = true;
-                    children.add(replyComment);
-                } else {
-                    if(history) break;
-                }
-            }
-        });
-
-        List<DealCommentRes> result = new ArrayList<>();
-        resultMap.entrySet().stream().forEach(entry -> {
-            DealCommentRes dealCommentRes = entry.getValue();
-            result.add(dealCommentRes);
-        });
-
-        return result;
+        return resultMap;
     }
 
     public int getCommentCount(Long dealId) {
