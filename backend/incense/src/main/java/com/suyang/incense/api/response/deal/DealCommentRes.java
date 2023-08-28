@@ -36,11 +36,12 @@ public class DealCommentRes {
     private List<CommentReplyRes> children = new ArrayList<>();
 
     @QueryProjection
-    public DealCommentRes(Long commentId, String writer, String content, LocalDateTime createdDate, Byte isSecret) {
+    public DealCommentRes(Long commentId, String writer, String content, LocalDateTime createdDate, Byte isSecret, List<CommentReplyRes> children) {
         this.commentId = commentId;
         this.writer = writer;
         this.content = content;
         this.createdDate = createdDate;
         this.isSecret = isSecret;
+        this.children = children;
     }
 }
