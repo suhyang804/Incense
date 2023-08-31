@@ -72,10 +72,8 @@
 
 ### ✒️ Swagger
 
-<img src="./docs/swagger1.png" width="440" height="359">
-<img src="./docs/swagger2.png" width="440" height="359">
-<img src="./docs/swagger3.png" width="440" height="321">
-<img src="./docs/swagger4.png" width="440" height="293">
+<img src="./docs/swagger1.PNG" width="440" height="359">
+<img src="./docs/swagger2.PNG" width="440" height="359">
 
 <br>
 
@@ -128,4 +126,7 @@ In:Cense 메인 화면에서 주요 서비스로 쉽게 이동할 수 있습니�
 북마크한 나눔판매 글은 마이페이지에서 확인 가능합니다. 
 <br><br>
 <img src="./docs/나눔판매.gif">
+
+
+
 
