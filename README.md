@@ -57,7 +57,7 @@
 ### 📋 API 명세서
 
 <!-- 두 이미지를 한 행으로 할 수 있는 최선의 사이즈 -->
-<img src="./docs/api.png">
+<img src="./docs/api.PNG">
 
 <br><br>
 
@@ -72,8 +72,8 @@
 
 ### ✒️ Swagger
 
-<img src="./docs/swagger1.PNG" width="440" height="359">
-<img src="./docs/swagger2.PNG" width="440" height="359">
+<img src="./docs/swagger1.PNG">
+<img src="./docs/swagger2.PNG">
 
 <br>
 
@@ -128,5 +128,5 @@ In:Cense 메인 화면에서 주요 서비스로 쉽게 이동할 수 있습니�
 <img src="./docs/나눔판매.gif">
 
 
-
+<br><br><br>
 
