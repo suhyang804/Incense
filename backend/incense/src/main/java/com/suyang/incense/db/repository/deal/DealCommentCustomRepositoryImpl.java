@@ -28,8 +28,8 @@ public class DealCommentCustomRepositoryImpl implements DealCommentCustomReposit
         List<DealCommentRes> resultMap = jpaQueryFactory
                 .selectFrom(dealComment)
                 .join(dealComment.member, member)
-                .innerJoin(commentReply).on(commentReply.dealComment.eq(dealComment))
-                .join(commentReply.member, member)
+                .leftJoin(commentReply).on(commentReply.dealComment.eq(dealComment))
+                .leftJoin(commentReply.member, member)
                 .where(dealComment.deal.id.eq(dealId))
                 .transform(groupBy(dealComment.id)
                         .list(
@@ -52,6 +52,14 @@ public class DealCommentCustomRepositoryImpl implements DealCommentCustomReposit
                         )
                 );
 
+        resultMap.forEach(dealCommentRes -> {
+            if(dealCommentRes.getChildren() != null && !dealCommentRes.getChildren().isEmpty()){
+                if(dealCommentRes.getChildren().get(0).getCommentId() == null){
+                    dealCommentRes.setChildren(Collections.emptyList());
+                }
+            }
+        });
+        
         return resultMap;
     }
 
